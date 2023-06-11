@@ -225,34 +225,24 @@ if (!$connect) {
 						
 						</div>
 	  <tbody>
-            <?php
+	  <?php
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
 
-    $select_query = "SELECT orders.*, orders.order_status, orders.product_price, orders.user_quantity
-                     FROM orders
-                     INNER JOIN checkout ON orders.order_id = checkout.order_id 
-                     WHERE orders.order_id =checkout.order_id and orders.username = '$username' ORDER BY order_id DESC ";
+    $select_query = "SELECT * FROM orders WHERE username = '$username' ORDER BY order_id DESC";
     $result = mysqli_query($connect, $select_query);
 
     if ($result === false) {
         die(mysqli_error($connect));
     }
 ?>
-   <div class="row row-pb-lg">
+<div class="row row-pb-lg">
     <div class="col-md-12">
         <?php
         while ($row = mysqli_fetch_assoc($result)) {
             $order_id = $row['order_id'];
-            $product_image = $row['product_image'];
-            $product_gender = $row['product_gender'];
-            $product_name = $row['product_name'];
-            $product_price = $row['product_price'];
-            $user_quantity = $row['user_quantity'];
-            $user_color = $row['user_color'];
-            $user_size = $row['user_size'];
             $order_status = $row['order_status'];
-            $total_cost = $product_price * $user_quantity;
+            
             ?>
             <div class="product-cart d-flex">
                 <div class="one-forth">
@@ -267,8 +257,7 @@ if (isset($_SESSION['username'])) {
                 </div>
                 <div class="one-eight text-right pr-4">
                     <div class="display-tc">
-                    <a href="http://localhost/fyp/order_history_details.php?order_id=<?php echo $row['order_id']; ?>" class="btn btn-primary">View Details</a>
-
+                        <a href="http://localhost/fyp/order_history_details.php?order_id=<?php echo $order_id; ?>" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
