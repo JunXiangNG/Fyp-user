@@ -217,11 +217,20 @@ if ($count > 0) {
 								<li class="active"><a href="http://localhost/fyp/user_home_page.php">Home</a></li>
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/men.php">Men</a>
-								
+									<ul class="dropdown">
+										<li><a href="#">Nike</a></li>
+										<li><a href="#">Adidas</a></li>
+									
+									</ul>
 								</li>
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/women.php">Women</a>
+									<ul class="dropdown">
+									    <li><a href="#">Nike</a></li>
+										<li><a href="#">Adidas</a></li>
+										
 									
+									</ul>
 								</li>
 							
 								<li><a href="http://localhost/fyp/about.php">About</a></li>
@@ -302,19 +311,19 @@ if ($count > 0) {
         <input type="date" name="birthday" min="1963-01-01" max="2005-01-01" class="input-field" value="<?php echo $birthday; ?>"><br><br>
 
         <input type="checkbox" name="change_password" id="change-password-checkbox" onchange="togglePasswordFields()"> Change Password<br><br>
-		
+
         <div id="password-fields" style="display: none;">
           <label>New Password :</label>
-          <input type="password" name="password" id="password" class="input-field password-container"  pattern="(?=.*[@#!$*()])(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Password must contain at least 8 characters and at least 1 Alphabet and 1 Special Character"><br><br>
-			
-			<p id="message" style="display:none; font-weight: bold;" >Password is <span id="strenght"></span></p>
+          <input type="password" placeholder="Password" name="password" id="password"    class="input-field password-container"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
+    title="Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number"><br><br>
+
+  <p id="message" style="display: none; font-weight: bold;">Password is <span id="strength"></span></p>
 
           <label>Confirm Password :</label>
           <input type="password" name="cpassword" class="input-field" id="confirm-password"><br><br>
         </div>
 
-        <input type="checkbox" name="set_address" id="set_address-checkbox" onchange="toggleAddressFields()">  Billing Address<br><br>
+		<input type="checkbox" name="set_address" id="set_address-checkbox" onchange="toggleAddressFields()">  Billing Details<br><br>
 		<div id="address-fields" style="display: none;">
 							<div class="form-group">
 							<label for="phonenumber">Phone Number :</label>
@@ -357,8 +366,9 @@ if ($count > 0) {
 						</div>
 					</div>
 					
-        <input type="submit" name="submit" value="Save"><br>
+       
       </fieldset>
+      <input type="submit" name="submit" value="Save"><br>
     </form>
   </div>
 
@@ -396,39 +406,42 @@ if ($count > 0) {
 	<script src="js/jquery.stellar.min.js"></script>
 	<!-- Main -->
 	<script src="js/main.js"></script>
-  
-	<script>
-				var pass =document.getElementById("password");
-				var msg =document.getElementById("message");
-				var str =document.getElementById("strenght");
-				var uppercaseRegex = /[A-Z]/;
-                var punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
-				pass.addEventListener('input',() => {
-					if(pass.value.length  > 0){
-						
-						msg.style.display="block";
-					}
-					else{
-						msg.style.display="none";
-					}
-					if(pass.value.length < 4){
-						str.innerHTML = "weak";
-						pass.style.bordercolor="#ff5925";
-						msg.style.color="#ff5925";
-					}
-					else if(pass.value.length >= 4 && pass.value.length <8 && uppercaseRegex.test(pass.value)){
-						str.innerHTML = "medium";
-						pass.style.bordercolor="gold";
-						msg.style.color="gold";
-					}
-					else if (pass.value.length >=8 && uppercaseRegex.test(pass.value) && punctuationRegex.test(pass.value)) {
-					str.innerHTML ="strong";
-					pass.style.bordercolor="#26d730";
-					msg.style.color="#26d730";
-				}
-				
-				})
-				</script>
+  <script>
+    var pass = document.getElementById("password");
+    var msg = document.getElementById("message");
+    var str = document.getElementById("strength");
+    var uppercaseRegex = /[A-Z]/;
+    var punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
+
+    pass.addEventListener('input', () => {
+      if (pass.value.length > 0) {
+        msg.style.display = "block";
+      } else {
+        msg.style.display = "none";
+      }
+      if (pass.value.length < 4) {
+        str.innerHTML = "weak";
+        pass.style.borderColor = "#ff5925";
+        msg.style.color = "#ff5925";
+      } else if (pass.value.length >= 4 && pass.value.length < 8 && uppercaseRegex.test(pass.value)) {
+        str.innerHTML = "medium";
+        pass.style.borderColor = "gold";
+        msg.style.color = "gold";
+      } else if (pass.value.length >= 8 && pass.value.length <= 11 && uppercaseRegex.test(pass.value) && punctuationRegex.test(pass.value)) {
+        str.innerHTML = "strong";
+        pass.style.borderColor = "#26d730";
+        msg.style.color = "#26d730";
+      } else if (pass.value.length > 11) {
+        str.innerHTML = "Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number";
+        pass.style.borderColor = "#ff5925";
+        msg.style.color = "#ff5925";
+      } else {
+        str.innerHTML = "";
+        pass.style.borderColor = "";
+        msg.style.color = "";
+      }
+    });
+  </script>
 	<script>
     function togglePasswordFields() {
       var passwordFields = document.getElementById("password-fields");
