@@ -164,11 +164,10 @@ if (isset($_GET['email'])) {
   <input type="hidden" name="email" class="reset-container"value="<?php echo $email ?>">
  
  
-  <input type="password" name="password"  id="password"placeholder="Enter new password"class="reset-container"  required pattern="(?=.*[@#!$*()])(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-	title="Password must contain at least 8 characters and at least 1 Alphabet and 1 Special Character"> 
-  
-  <p id="message" style="display:none; margin-left:30px; margin-top:-20px; font-weight:bold;" >Password is <span id="strenght"></span></p>
+  <input type="password" placeholder="Password" name="password" id="password" class="reset-container" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
+    title="Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number">
 
+  <p id="message" style="display: none; font-weight: bold;">Password is <span id="strength"></span></p>
 
   <input type="password" name="cpassword" required placeholder="Confirm new password"class="reset-container" require>
   <br>
@@ -243,40 +242,42 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 	</div>
 	
-	
 	<script>
-				var pass =document.getElementById("password");
-				var msg =document.getElementById("message");
-				var str =document.getElementById("strenght");
-				var uppercaseRegex = /[A-Z]/;
-                var punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
-				pass.addEventListener('input',() => {
-					if(pass.value.length  > 0){
-						
-						msg.style.display="block";
-					}
-					else{
-						msg.style.display="none";
-					}
-					if(pass.value.length < 4){
-						str.innerHTML = "weak";
-						pass.style.bordercolor="#ff5925";
-						msg.style.color="#ff5925";
-					}
-					else if(pass.value.length >= 4 && pass.value.length <8 && uppercaseRegex.test(pass.value)){
-						str.innerHTML = "medium";
-						pass.style.bordercolor="gold";
-						msg.style.color="gold";
-					}
-					else if (pass.value.length >=8 && uppercaseRegex.test(pass.value) && punctuationRegex.test(pass.value)) {
-					str.innerHTML ="strong";
-					pass.style.bordercolor="#26d730";
-					msg.style.color="#26d730";
-				}
-					
-				})
+    var pass = document.getElementById("password");
+    var msg = document.getElementById("message");
+    var str = document.getElementById("strength");
+    var uppercaseRegex = /[A-Z]/;
+    var punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
 
-				</script>
+    pass.addEventListener('input', () => {
+      if (pass.value.length > 0) {
+        msg.style.display = "block";
+      } else {
+        msg.style.display = "none";
+      }
+      if (pass.value.length < 4) {
+        str.innerHTML = "weak";
+        pass.style.borderColor = "#ff5925";
+        msg.style.color = "#ff5925";
+      } else if (pass.value.length >= 4 && pass.value.length < 8 && uppercaseRegex.test(pass.value)) {
+        str.innerHTML = "medium";
+        pass.style.borderColor = "gold";
+        msg.style.color = "gold";
+      } else if (pass.value.length >= 8 && pass.value.length <= 11 && uppercaseRegex.test(pass.value) && punctuationRegex.test(pass.value)) {
+        str.innerHTML = "strong";
+        pass.style.borderColor = "#26d730";
+        msg.style.color = "#26d730";
+      } else if (pass.value.length > 11) {
+        str.innerHTML = "Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number";
+        pass.style.borderColor = "#ff5925";
+        msg.style.color = "#ff5925";
+      } else {
+        str.innerHTML = "";
+        pass.style.borderColor = "";
+        msg.style.color = "";
+      }
+    });
+  </script>
     <!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
    <!-- popper -->
