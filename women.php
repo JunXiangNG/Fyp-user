@@ -272,7 +272,7 @@ if(isset($_SESSION['username'])) {
        
 
 <?php
-$select_query = "SELECT * FROM product INNER JOIN product_details ON product.product_id = product_details.product_id WHERE product_gender='women'";
+$select_query = "SELECT * FROM product INNER JOIN product_details ON product.product_id = product_details.product_id WHERE product_gender='women' and  product_status = 'A'";
 
 if(isset($_GET['brands']))
 {
