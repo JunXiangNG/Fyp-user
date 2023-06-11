@@ -258,147 +258,140 @@ if (!$connect) {
 	  <tbody>
 	  <?php
 if (isset($_SESSION['username'])) {
-          
     $username = $_SESSION['username'];
     $order_id = $_GET['order_id'];
 
-
     $subtotal = 0;
 
-    $select_query = "SELECT orders.*, orders.order_status, orders.product_price, orders.user_quantity
-    FROM orders
-    INNER JOIN checkout ON orders.order_id = checkout.order_id 
-    WHERE orders.order_id = '$order_id'
-    and orders.username = '$username' ";
-    
+    $select_query = "SELECT pd.product_details_id, pd.product_color, pd.product_size, pd.product_gender, pd.product_image, pd.product_price, od.user_quantity, p.product_name, o.order_id
+    FROM product_details pd
+    INNER JOIN order_details od ON pd.product_details_id = od.product_details_id
+    INNER JOIN orders o ON od.order_id = o.order_id
+    INNER JOIN product p ON pd.product_id = p.product_id
+    WHERE o.order_id = '$order_id'
+    AND o.username = '$username'";    
+
     $result = mysqli_query($connect, $select_query);
 
-
     if ($result === false) {
-	
         die(mysqli_error($connect));
-	
     }
 ?>
-   <div class="row row-pb-lg">
-    <div class="col-md-12">
-	  <?php
-	  
-if ($row = mysqli_fetch_assoc($result)) {
-    $order_id = $row['order_id'];
-    $product_image = $row['product_image'];
-    $product_gender = $row['product_gender'];
-    $product_name = $row['product_name'];
-    $product_price = $row['product_price'];
-    $user_quantity = $row['user_quantity'];
-    $user_color = $row['user_color'];
-    $user_size = $row['user_size'];
-    $total_cost = $product_price * $user_quantity;
-    $subtotal += $total_cost;
-?>
-    <div class="product-cart d-flex">
-        <div class="one-forth">
-            <div class="product-img" style="background-image: url('<?php
-            $imageData = $row['product_image'];
-            if ($imageData) {
-                $imageData = base64_encode($imageData);
-                echo 'data:image/jpeg;base64,' . $imageData;
-            } else {
-                echo 'path/to/default/image.jpg'; // Provide a default image path if the product image is empty
+
+<html>
+<head>
+    <title>Receipt Generator</title>
+</head>
+<body>
+    <div class="row row-pb-lg">
+        <div class="col-md-12">
+            <?php
+            while ($row = mysqli_fetch_assoc($result)) {
+                $order_id = $row['order_id'];
+                $product_image = $row['product_image'];
+                $product_gender = $row['product_gender'];
+                $product_name = $row['product_name'];
+                $product_price = $row['product_price'];
+                $user_quantity = $row['user_quantity'];
+                $product_color = $row['product_color'];
+                $product_size = $row['product_size'];
+                $total_cost = $product_price * $user_quantity;
+                $subtotal += $total_cost;
+            ?>
+
+            <div class="product-cart d-flex">
+                <div class="one-forth">
+                    <div class="product-img" style="background-image: url('<?php
+                    $imageData = $row['product_image'];
+                    if ($imageData) {
+                        $imageData = base64_encode($imageData);
+                        echo 'data:image/jpeg;base64,' . $imageData;
+                    } else {
+                        echo 'path/to/default/image.jpg'; // Provide a default image path if the product image is empty
+                    }
+                    ?>');">
+                    </div>
+
+                    <div class="display-tc">
+                        <h3><?php echo $product_name; ?></h3>
+                    </div>
+                </div>
+                <div class="one-eight text-center px-10">
+                    <div class="display-tc">
+                        <span class="price">RM <?php echo $product_price; ?></span>
+                    </div>
+                </div>
+
+                <div class="one-eight text-right pr-6">
+                    <div class="display-tc">
+                        <span class="price" style="margin-left: -10px;"><?php echo $user_quantity; ?></span>
+                    </div>
+                </div>
+
+                <div class="one-eight text-right pr-6">
+                    <div class="display-tc">
+                        <span class="price" style="margin-left: -10px;"><?php echo $product_size; ?></span>
+                    </div>
+                </div>
+
+                <div class="one-eight text-right pr-6">
+                    <div class="display-tc">
+                        <span class="price"><?php echo $product_color; ?></span>
+                    </div>
+                </div>
+                <div class="one-eight text-right px-4">
+                    <div class="display-tc">
+                        <span class="price"><?php echo $product_gender; ?></span>
+                    </div>
+                </div>
+
+                <div class="one-eight text-right pr-6">
+                    <div class="display-tc">
+                        <span class="price">RM<?php echo number_format($total_cost, 2); ?></span>
+                        <input type="hidden" name="total_cost" value="<?php echo $total_cost; ?>">
+                    </div>
+                </div>
+            </div>
+            <?php
             }
-            ?>');">
-            </div>
-
-            <div class="display-tc">
-                <h3><?php echo $product_name; ?></h3>
-            </div>
+            ?>
         </div>
-        <div class="one-eight text-center px-10">
-            <div class="display-tc">
-                <span class="price">RM <?php echo $product_price; ?></span>
-            </div>
-        </div>
+    </div>
 
-      
-      
-         
-                   
-				<div class="one-eight text-right pr-6">
-                        <div class="display-tc">
-                            <span class="price" style="margin-left: -10px;" ><?php echo $user_quantity; ?></span>
+    <div class="row row-pb-lg">
+        <div class="col-md-12">
+            <div class="total-wrap">
+                <div class="row">
+                    <div class="col-sm-8">
+                    </div>
+                    <div class="col-sm-4 text-center">
+                        <div class="total">
+                            <div class="sub">
+                                <p><span>Subtotal:</span> <span class="price">RM<?php echo number_format($subtotal, 2); ?></span></p>
+                                <p><span>Delivery:</span> <span>Free Shipping</span></p>
+                            </div>
+                            <div class="grand-total">
+                                <p><span><strong>Total:</strong></span> <span class="price">RM<?php echo number_format($subtotal, 2); ?></span></p>
+                            </div>
                         </div>
                     </div>
-       
-
-
-                   
-				<div class="one-eight text-right pr-6">
-                        <div class="display-tc">
-                            <span class="price" style="margin-left: -10px;" ><?php echo $user_size; ?></span>
-                        </div>
-                    </div>
-
-					<div class="one-eight text-right pr-6">
-                        <div class="display-tc">
-                            <span class="price"><?php echo $user_color; ?></span>
-                        </div>
-                    </div>
-					<div class="one-eight text-right px-4">
-                        <div class="display-tc">
-                            <span class="price"><?php echo $product_gender; ?></span>
-                        </div>
-                    </div>
-
-                    <div class="one-eight text-right pr-6">
-                        <div class="display-tc">
-                            <span class="price">RM<?php echo number_format($total_cost, 2); ?></span>
-							<input type="hidden" name="total_cost" value="<?php echo $total_cost; ?>">
-
-                        </div>
-                    </div>
-                    
-		</div> 
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <p><a href="http://localhost/fyp/receipt-db.php?order_id=<?php echo $order_id; ?>" class="btn btn-primary">Print Receipt</a></p>
+        </div>
+    </div>
+</body>
+</html>
 
 <?php
-            
-						}
-        }
-
+}
 ?>
-<div class="row row-pb-lg">
-    <div class="col-md-12">
-        <div class="total-wrap">
-            <div class="row">
-                <div class="col-sm-8">
-                </div>
-                <div class="col-sm-4 text-center">
-                    <div class="total">
-                        <div class="sub">
-                            <p><span>Subtotal:</span> <span class="price">RM<?php echo number_format($subtotal, 2); ?></span></p>
-                            <p><span>Delivery:</span> <span>Free Shipping</span></p>
-                        </div>
-                        <div class="grand-total">
-                            <p><span><strong>Total:</strong></span> <span class="price">RM<?php echo number_format($subtotal, 2); ?></span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-</tbody>
-
-</table>
-<div class="row">
-    <div class="col-md-12 text-left">
-		
-        <p><a href="http://localhost/fyp/receipt-db.php?order_id=<?php echo $row['order_id']; ?>" class="btn btn-primary">Print Receipt</a></p>
-    </div>
-</div>
 
 							</div>
 						</div>
