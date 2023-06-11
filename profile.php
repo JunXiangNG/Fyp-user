@@ -314,7 +314,7 @@ if ($count > 0) {
 
         <div id="password-fields" style="display: none;">
           <label>New Password :</label>
-          <input type="password" placeholder="Password" name="password" id="password"    class="input-field password-container"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
+          <input type="password"  name="password" id="password"    class="input-field password-container"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
     title="Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number"><br><br>
 
   <p id="message" style="display: none; font-weight: bold;">Password is <span id="strength"></span></p>
