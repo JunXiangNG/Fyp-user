@@ -300,7 +300,7 @@ $questions = array(
 			
 			<div class="input-group password-container">
 			<input type="password" placeholder="Password" name="password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
-    title="Password must contain between 8 to 11 characters and at least 1 alphabet and 1 number">
+    title="Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number">
 
   <p id="message" style="display: none; font-weight: bold;">Password is <span id="strength"></span></p>
 
@@ -403,13 +403,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<a href="#" class="js-gotop"><i class="ion-ios-arrow-up"></i></a>
 	</div>
 	
-	
 	<script>
     var pass = document.getElementById("password");
     var msg = document.getElementById("message");
     var str = document.getElementById("strength");
     var uppercaseRegex = /[A-Z]/;
-    var punctuationChars = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'];
+    var punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
 
     pass.addEventListener('input', () => {
       if (pass.value.length > 0) {
@@ -425,25 +424,20 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         str.innerHTML = "medium";
         pass.style.borderColor = "gold";
         msg.style.color = "gold";
-      } else if (pass.value.length >= 8 && uppercaseRegex.test(pass.value) && hasPunctuation(pass.value)) {
+      } else if (pass.value.length >= 8 && pass.value.length <= 11 && uppercaseRegex.test(pass.value) && punctuationRegex.test(pass.value)) {
         str.innerHTML = "strong";
         pass.style.borderColor = "#26d730";
         msg.style.color = "#26d730";
+      } else if (pass.value.length > 11) {
+        str.innerHTML = "Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number";
+        pass.style.borderColor = "#ff5925";
+        msg.style.color = "#ff5925";
       } else {
         str.innerHTML = "";
         pass.style.borderColor = "";
         msg.style.color = "";
       }
     });
-
-    function hasPunctuation(password) {
-      for (var i = 0; i < password.length; i++) {
-        if (punctuationChars.includes(password[i])) {
-          return true;
-        }
-      }
-      return false;
-    }
   </script>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
