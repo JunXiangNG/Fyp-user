@@ -13,53 +13,63 @@ if (isset($_SESSION['username'])) {
 if (isset($_POST['submit'])) {
 	$username = $_POST['username'];
 	$email = $_POST['email'];
-	$birthday=date('Y-m-d',strtotime($_POST['birthday']));
-	$gender=$_POST['gender'];
+	$birthday = date('Y-m-d', strtotime($_POST['birthday']));
+	$gender = $_POST['gender'];
 	$password = md5($_POST['password']);
 	$cpassword = md5($_POST['cpassword']);
 	$question = mysqli_real_escape_string($connect, $_POST['question']);
     $answer = mysqli_real_escape_string($connect, $_POST['answer']);
 
 	if ($password == $cpassword) {
-		$sql = "SELECT * FROM users WHERE email='$email'";
-		$result = mysqli_query($connect, $sql);
-		if (!$result->num_rows > 0) {
-			$sql = "INSERT INTO users (username, email,birthday,gender, password,question, answer)
-        VALUES ('$username', '$email','$birthday','$gender','$password', '$question', '$answer')";		
+		$emailExistsSql = "SELECT * FROM users WHERE email='$email'";
+		$usernameExistsSql = "SELECT * FROM users WHERE username='$username'";
+    
+		$emailExistsResult = mysqli_query($connect, $emailExistsSql);
+		$usernameExistsResult = mysqli_query($connect, $usernameExistsSql);
+    
+		if (!$emailExistsResult->num_rows > 0 && !$usernameExistsResult->num_rows > 0) {
+			$sql = "INSERT INTO users (username, email, birthday, gender, password, question, answer)
+        			VALUES ('$username', '$email', '$birthday', '$gender', '$password', '$question', '$answer')";		
 			$result = mysqli_query($connect, $sql);
 			if ($result) {
 				echo "<script>alert('Wow! User Registration Completed.')</script>";
 				echo '<script>window.location.href = "login.php";</script>';
 				$username = "";
 				$email = "";
-				$birthday="";
-				$gender="";
+				$birthday = "";
+				$gender = "";
 				$_POST['password'] = "";
 				$_POST['cpassword'] = "";
 				
 			} else {
-				echo "<script>alert('Woops! Something Wrong Went.')</script>";
+				echo "<script>alert('Woops! Something Went Wrong.')</script>";
 			}
 		} else {
-			echo "<script>alert('Woops! Email Already Exists.')</script>";
+			if ($emailExistsResult->num_rows > 0) {
+				echo "<script>alert('Woops! Email Already Exists.')</script>";
+			}
+			if ($usernameExistsResult->num_rows > 0) {
+				echo "<script>alert('Woops! Username Already Exists.')</script>";
+			}
 		}
 
 	} else {
 		echo "<script>alert('Password Not Matched.')</script>";
 	}
 }
+
 $questions = array(
 	'What is the name of your first pet?',
 	'What is your favourite book?',
 	'What is your favourite movie?',
 	'What is your favourite color?',
 	'What is your favourite brand sport shoes?',
-	'what is your ic last four numbers?'
- );
- session_destroy();
+	'What are the last four digits of your IC number?'
+);
 
-
+session_destroy();
 ?>
+
 
 <!DOCTYPE html>
 <html>
