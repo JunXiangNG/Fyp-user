@@ -127,11 +127,11 @@ if (isset($_POST['submit'])) {
   $zipcode=$_POST['zip_postalcode'];
 
   // Check if email already exists in the database
-  $result = mysqli_query($connect, "SELECT user_id FROM users WHERE email='$email' AND user_id != $id");
+  $result = mysqli_query($connect, "SELECT user_id FROM users WHERE username='$username' AND user_id != $id");
   $count = mysqli_num_rows($result);
   if ($count > 0) {
     // Display error message
-    echo "<script>alert('Email already exists in the database. Please choose a different email.')</script>";
+    echo "<script>alert('Username already exist. Please change another name.')</script>";
   } else {
     // Update user data in the database
     $result = mysqli_query($connect, "UPDATE users SET username='$username', gender='$gender', birthday='$birthday', email='$email',phone='$phone',address='$address',town_city='$town',state_province='$state',zip_postalcode='$zipcode' WHERE user_id=$id");
@@ -327,7 +327,7 @@ if ($count > 0) {
 		<div id="address-fields" style="display: none;">
 							<div class="form-group">
 							<label for="phonenumber">Phone Number :</label>
-							<input type="text" name="phone"class="input-field" placeholder="Phone Number" pattern="\d{3}-\d{8}" title="Please enter a correct phone number in the format , for example: 011-26126335"value="<?php echo $phone; ?>" >
+							<input type="text" name="phone"class="input-field" placeholder="Phone Number" pattern="\d{3}-\d{7}" title="Please enter a correct phone number in the format , for example: 011-26126335"value="<?php echo $phone; ?>" >
 
 						</div>
 						<div class="form-group">
