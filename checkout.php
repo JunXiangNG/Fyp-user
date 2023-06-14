@@ -277,13 +277,13 @@ if (isset($_SESSION['username'])) {
 							<input type="hidden" name="order_id" value="<?php echo $_GET["order_id"]; ?>">
 								<div class="form-group">
 									<label for="receivername">Receiver Name</label>
-									<input type="text" name="received_name" class="form-control" value="<?php echo $username; ?>" required>
+									<input type="text" name="username" class="form-control" value="<?php echo $username; ?>" required>
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 						<label for="phonenumber">Phone Number</label>
-    						<input type="text" name="phone" class="form-control" pattern="\d{3}-\d{7}" title="Please enter a correct phone number in the format, for example: 011-26126335"value="<?php echo $phone; ?>" required>
+    						<input type="text" name="phone" class="form-control" pattern="\d{3}-\d{7}" title="Please enter a correct phone number in the format, for example: 012-1234567"value="<?php echo $phone; ?>" required>
 
 						</div>
 						<div class="form-group">
@@ -390,7 +390,8 @@ if (isset($_SESSION['username'])) {
 		</div>
 	    </div>
 
-	 <?php
+
+		<?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -409,7 +410,7 @@ if (isset($_POST['savebtn'])) {
             die(mysqli_error($connect));
         }
 
-        $name = $_POST['received_name'];
+        $name = $_POST['username'];
         $phone = $_POST['phone'];
         $address = $_POST['address'];
         $town = $_POST['town_city'];
@@ -438,6 +439,11 @@ if (isset($_POST['savebtn'])) {
         }
 
         if ($numRows > 0) {
+            // Generate a receipt ID
+            $receipt_id = null; // Add code to generate a unique receipt ID here
+
+            $success = true; // Flag to track if all orders are successful
+
             while ($cart_row = mysqli_fetch_array($cart_result)) {
                 $order_id = $cart_row['order_id'];
                 $product_id = $cart_row['product_id'];
@@ -446,10 +452,16 @@ if (isset($_POST['savebtn'])) {
                 $user_quantity = $cart_row['quantity'];
 
                 // Insert checkout record
-                $sql = "INSERT INTO checkout (order_id, product_id, username, received_name, phone, address, town_city, state_province, zip_postalcode, card_name, card_number, card_expire, cvv)
-                        VALUES ('$order_id', '$product_id', '$username', '$name', '$phone', '$address', '$town', '$state', '$zipcode', '$cardname', '$cardnumber', '$cardexpire', '$cvv')";
+                $insert_receipts = "INSERT INTO receipts (receipt_id, order_id, username, phone, address, town_city, state_province, zip_postalcode)
+                        VALUES ('$receipt_id', '$order_id', '$username', '$phone', '$address', '$town', '$state', '$zipcode')";
 
-                $result_insert = mysqli_query($connect, $sql);
+				$result_insert = mysqli_query($connect, $insert_receipts);
+
+				if ($result_insert) {
+					echo "<script>alert('Card Details not matched.')</script>";
+				} else {
+					echo "Error inserting data: " . mysqli_error($connect);
+				}
 
                 $product_query = "SELECT product_details_id, product_quantity
                                   FROM product_details
@@ -464,15 +476,20 @@ if (isset($_POST['savebtn'])) {
 
                 if (!$update_result) {
                     echo "Error updating product quantity: " . mysqli_error($connect);
+                    $success = false; // Set success flag to false if any order fails
                 } else {
                     echo "Product quantity updated successfully.";
                 }
             }
 
-            echo "<script>alert('Payment Successful.'); window.location.href = 'order-complete.php';</script>";
+            if ($success) {
+                echo "<script>alert('Payment Successful.'); window.location.href = 'order-complete.php';</script>";
 
-            $delete_query2 = "DELETE FROM add_to_cart WHERE username = '$username'";
-            $result = mysqli_query($connect, $delete_query2);
+                $delete_query2 = "DELETE FROM add_to_cart WHERE username = '$username'";
+                $result = mysqli_query($connect, $delete_query2);
+            } else {
+                echo "<script>alert('Error updating product quantity. Please try again.'); window.location.href = 'http://localhost/fyp/checkout.php';</script>";
+            }
         } else {
             echo "<script>alert('Card Details not matched.'); window.location.href = 'http://localhost/fyp/checkout.php';</script>";
         }
@@ -481,9 +498,6 @@ if (isset($_POST['savebtn'])) {
     }
 }
 ?>
-
-
-
 
 
 
