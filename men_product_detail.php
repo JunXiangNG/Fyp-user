@@ -176,35 +176,11 @@ if (!$connect) {
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/men.php">Men</a>
 
-									<ul class="dropdown">
-									<?php
-										if ($result) {
-											while ($row = mysqli_fetch_assoc($result)) {
-												$brand_name = $row['brand_name'];
-												echo '<li>' . $brand_name . '</li>';
-											}
-										} else {
-											echo "Query failed: " . mysqli_error($connect);
-										}
-										?>
 									
-									</ul>
 								</li>
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/women.php">Women</a>
-									<ul class="dropdown">
-													<?php
-									if ($result) {
-										mysqli_data_seek($result, 0); // Reset the query result pointer to the first row
-										while ($row = mysqli_fetch_assoc($result)) {
-											$brand_name = $row['brand_name'];
-											echo '<li>' . $brand_name . '</li>';
-										}
-									} else {
-										echo "Query failed: " . mysqli_error($connect);
-									}
-									?>
-									</ul>
+									
 								</li>
 							
 								<li><a href="http://localhost/fyp/about.php">About</a></li>
@@ -235,7 +211,7 @@ if (!$connect) {
 								?>
 
 								<li class="cart">
-									<a href="http://localhost/fyp/cart.php#">
+									<a href="cart.php">
 										<i class="icon-shopping-cart"></i> <?php echo $count; ?>
 									</a>
 								</li>	
@@ -298,10 +274,10 @@ if (isset($_GET['product_id'])) {
             $product_name = $row['product_name'];
             $product_price = $row['product_price'];
             $product_description = $row['product_description'];
-			$product_quantity = $row['product_quantity'];
-			$product_gender = $row['product_gender'];
-			$product_size = $row['product_size'];
-			$product_color = $row['product_color'];
+	  $product_quantity = $row['product_quantity'];
+	  $product_gender = $row['product_gender'];
+	  $product_size = $row['product_size'];
+	  $product_color = $row['product_color'];
         }
         
         // Display the color and size options
@@ -378,7 +354,7 @@ if (isset($_GET['product_id'])) {
                                         <ul style="list-style-type: none; padding: 0;">
                                             <?php while ($size_row = mysqli_fetch_assoc($size_result)) { ?>
                                                 <li style="display: inline-block; width: 50px; height: 50px; border: 1px solid black; text-align: center; line-height: 50px; font-weight: bold;">
-                                                    <input type="checkbox" id="size" name="size" value="<?php echo $size_row['product_size']; ?>" onclick="handleCheckboxChange(this); updateProductQuantity();">
+                                                    <input type="checkbox" id="size" name="size" value="<?php echo $size_row['product_size']; ?>" onclick="handleCheckboxChange(this); ">
                                                     <label for="size"><span style="color: black;"><?php echo $size_row['product_size']; ?></span></label>
                                                 </li>
                                             <?php } ?>
@@ -390,7 +366,7 @@ if (isset($_GET['product_id'])) {
                                         <ul style="list-style-type: none; padding: 0;">
                                             <?php while ($color_row = mysqli_fetch_assoc($color_result)) { ?>
                                                 <li style="display: inline-block; width: 100px; height: 50px; border: 1px solid black; text-align: center; line-height: 50px; font-weight: bold;">
-                                                    <input type="checkbox" id="colourBlack" name="colour" value="<?php echo $color_row['product_color']; ?>" onclick="handleCheckboxChange(this) ; updateProductQuantity();">
+                                                    <input type="checkbox" id="colourBlack" name="colour" value="<?php echo $color_row['product_color']; ?>" onclick="handleCheckboxChange(this); ">
                                                     <label for="colourBlack"><span style="color: black;"><?php echo $color_row['product_color']; ?></span></label>
                                                 </li>
                                             <?php } ?>
@@ -466,7 +442,8 @@ if (isset($_GET['product_id'])) {
 if (isset($_POST['savebtn'])) {
     // Get the form data
     $product_id = $_GET["product_id"];
-	$order_id = $_GET["order_id"];
+  
+   
 
     if (isset($_SESSION['username'])) {
         $username = $_SESSION['username'];
@@ -480,8 +457,6 @@ if (isset($_POST['savebtn'])) {
 
     $result = mysqli_query($connect, $query);
 
-    $order_query = "SELECT order_id FROM add_to_cart a INNER JOIN product_details o ON a.order_id = o.order_id WHERE a.order_id = '$order_id' ";
-
     // Check if the query was successful
     if ($result) {
         // Fetch the result into variables
@@ -489,10 +464,10 @@ if (isset($_POST['savebtn'])) {
         $product_name = $row['product_name'];
         $product_price = $row['product_price'];
         $product_quantity = $row['product_quantity'];
+       
         $user_size = $_POST['size'];
         $user_color = $_POST['colour'];
         $user_quantity = $_POST['quantity'];
-      
         $total_cost = $product_price * $user_quantity; // Assuming $product_price is defined
 
         // Sanitize the input
@@ -552,9 +527,9 @@ if (isset($_POST['savebtn'])) {
                 // Sanitize the product image
                 $product_image = mysqli_real_escape_string($connect, $product_image);
 
-                // Insert the data into the orders table
-                $ins_query = "INSERT INTO add_to_cart (username, product_details_id, product_id, product_name, product_price, total_cost, user_quantity, user_color, user_size, product_image, product_gender)
-                VALUES ('$username', '$product_details_id', '$product_id', '$product_name', '$product_price', '$total_cost', '$user_quantity', '$user_color', '$user_size', '$product_image', '$product_gender')";
+                // Insert the data into the add_to_cart table
+                $ins_query = "INSERT INTO add_to_cart (product_id,product_details_id, username, product_image, product_name, product_gender, product_price, user_size, user_color, user_quantity, total_cost)
+                VALUES ('$product_id','$product_details_id', '$username', '$product_image', '$product_name', '$product_gender', '$product_price', '$user_size', '$user_color', '$user_quantity', '$total_cost')";
                 $ins_result = mysqli_query($connect, $ins_query);
 
                 if ($ins_result) {
