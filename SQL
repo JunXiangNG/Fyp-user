@@ -120,6 +120,7 @@ CREATE TABLE add_to_cart (
     user_quantity INT NOT NULL, 
     total_cost DECIMAL(10, 2) NOT NULL,
     order_status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    order_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
