@@ -307,7 +307,7 @@ if (isset($_SESSION['username'])) {
 	  <?php
 	  
 while ($row = mysqli_fetch_assoc($result)) {
-    $order_id = $row['order_id'];
+    $cart_id = $row['cart_id'];
     $product_image = $row['product_image'];
     $product_gender = $row['product_gender'];
     $product_name = $row['product_name'];
@@ -347,11 +347,10 @@ while ($row = mysqli_fetch_assoc($result)) {
         </div>
 
         <?php
-        if (isset($_GET["edit"])) { //edit quantity of table add_to_cart and orders
-            $order_id = $_GET["order_id"];
-            $query = "SELECT * FROM orders
-                    JOIN add_to_cart ON orders.order_id = add_to_cart.order_id
-                    WHERE orders.order_id = $order_id";
+        if (isset($_GET["edit"])) { //edit quantity of table add_to_cart 
+            $cart_id = $_GET["cart_id"];
+            $query = "SELECT * FROM add_to_cart
+                     WHERE cart_id = $cart_id";
             $result = mysqli_query($connect, $query);
             $row = mysqli_fetch_assoc($result);
         }
@@ -361,27 +360,26 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class="display-tc">
                     <div class="quantity">
                         <div class="quantity-container">
-                            <button type="button" onclick="decreaseValue(<?php echo $order_id; ?>)">-</button>
-                            <input type="number" id="myNumber_<?php echo $order_id; ?>" name="quantity" min="1" max="5" value="<?php echo $user_quantity; ?>" readonly required>
-                            <button type="button" onclick="increaseValue(<?php echo $order_id; ?>)">+</button>
+                            <button type="button" onclick="decreaseValue(<?php echo $cart_id; ?>)">-</button>
+                            <input type="number" id="myNumber_<?php echo $cart_id; ?>" name="quantity" min="1" max="5" value="<?php echo $user_quantity; ?>" readonly required>
+                            <button type="button" onclick="increaseValue(<?php echo $cart_id; ?>)">+</button>
 		        
                         </div>
                     </div>
                 </div>
             </div>
-            <input type="submit" name="savebtn_<?php echo $order_id; ?>" value="UPDATE" alt="Update" class="update-button">
+            <input type="submit" name="savebtn_<?php echo $cart_id; ?>" value="UPDATE" alt="Update" class="update-button">
         </form>
 
 
                     <?php
-						if (isset($_POST["savebtn_$order_id"])) {
+						if (isset($_POST["savebtn_$cart_id"])) {
 							$user_quantity = $_POST['quantity']; // update $user_quantity
 
-							// Update quantity in the "orders" table
-							mysqli_query($connect, "UPDATE orders SET user_quantity='$user_quantity' WHERE order_id=$order_id");
+						
 
 							// Update quantity in the "add_to_cart" table
-							mysqli_query($connect, "UPDATE add_to_cart SET user_quantity='$user_quantity' WHERE order_id=$order_id");
+							mysqli_query($connect, "UPDATE add_to_cart SET user_quantity='$user_quantity' WHERE cart_id=$cart_id");
 
 							// Redirect or display a success message
 							echo "<script type='text/javascript'>
@@ -414,13 +412,13 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <div class="one-eight text-right pr-6">
                         <div class="display-tc">
                             <span class="price">RM<?php echo number_format($total_cost, 2); ?></span>
-							<input type="hidden" name="total_cost" value="<?php echo $total_cost; ?>">
+			<input type="hidden" name="total_cost" value="<?php echo $total_cost; ?>">
 
                         </div>
                     </div>
                     <div class="one-eight text-right pr-6">
                         <div class="display-tc">
-                            <a href="cart.php?del&order_id=<?php echo $row['order_id']; ?>" onclick="return confirmation();" class="closed"></a>
+                            <a href="cart.php?del&cart_id=<?php echo $row['cart_id']; ?>" onclick="return confirmation();" class="closed"></a>
                         </div>
 
                         </div>
@@ -470,7 +468,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 </div>
 <?php 
-    if(empty($order_id)) {
+    if(empty($cart_id)) {
         echo "<script type='text/javascript'>alert('You must be add product first.');</script>";
         echo '<script>window.location.href = "user_home_page.php";</script>';
     }
@@ -487,11 +485,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 if (isset($_REQUEST["del"])) 
 {
-    $order_id = $_REQUEST["order_id"];
-    $delete_query = "DELETE FROM orders  WHERE order_id = $order_id";
-	$delete_query2 = "DELETE FROM add_to_cart  WHERE order_id = $order_id";
+    $cart_id = $_REQUEST["cart_id"];
+    
+    $delete_query = "DELETE FROM add_to_cart  WHERE cart_id = $cart_id";
     $result = mysqli_query($connect, $delete_query);
-	$result = mysqli_query($connect, $delete_query2);
+	
     
     if ($result === false) {
         die(mysqli_error($connect));
