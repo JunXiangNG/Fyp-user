@@ -1,0 +1,135 @@
+CREATE TABLE link
+{
+link_id int PRIMARY KEY AUTO_INCREMENT,
+link_name VARCHAR(40) NOT NULL,
+url_link VARCHAR(255)
+};
+
+CREATE TABLE admin (
+admin_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+admin_username varchar(255) NOT NULL,
+admin_password varchar(255) NOT NULL,
+admin_gender char(10)  NOT NULL,
+admin_bdate date not null,
+admin_email varchar(255) NOT NULL,
+admin_image LONGBLOB NULL,
+admin_first_name varchar(255) NOT NULL,
+admin_last_name varchar(255) NOT NULL
+);
+
+CREATE TABLE brand (
+  brand_id INT PRIMARY KEY AUTO_INCREMENT,
+  brand_name VARCHAR(50) NOT NULL,
+  brand_code VARCHAR(5) NOT NULL
+);
+
+CREATE TABLE product (
+  product_id INT PRIMARY KEY AUTO_INCREMENT,
+  brand_id INT NOT NULL,
+  product_name VARCHAR(100) NOT NULL,
+  product_description VARCHAR(100) NOT NULL,
+  product_code VARCHAR(20) NOT NULL,
+  product_status VARCHAR(30) default ‘A’,
+  FOREIGN KEY (brand_id) REFERENCES brand (brand_id)
+);
+
+CREATE TABLE product_details (
+  product_details_id VARCHAR(20) PRIMARY KEY,
+  product_id INT NOT NULL,
+  product_color VARCHAR(20) NOT NULL,
+  product_size INT NOT NULL,
+  product_quantity INT NOT NULL,
+  product_gender VARCHAR(10) NOT NULL,
+  product_image LONGBLOB NOT NULL,  
+  product_price DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (product_id) REFERENCES product (product_id)
+);
+
+
+CREATE TABLE users (
+  user_id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username varchar(255) NOT NULL,
+  gender char(10) NOT NULL,
+  birthday date not null,
+  email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  question varchar(255) NOT null,
+  answer varchar(255) Not null,
+  phone VARCHAR(20) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  town_city VARCHAR(255) NOT NULL,
+  state_province VARCHAR(255) NOT NULL,
+  zip_postalcode VARCHAR(255) NOT NULL,
+  status VARCHAR(30) DEFAULT 'A'
+);
+
+
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL, 
+    order_status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    order_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE order_details (
+    detail_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    product_details_id VARCHAR(20) NOT NULL,
+    user_quantity INT NOT NULL,
+    total_cost DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (product_id) REFERENCES product(product_id),
+    FOREIGN KEY (product_details_id) REFERENCES product_details(product_details_id)
+);
+
+
+CREATE TABLE receipts (
+    receipt_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+     received_name VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    town_city VARCHAR(255) NOT NULL,
+    state_province VARCHAR(255) NOT NULL,
+    zip_postalcode VARCHAR(255) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+
+CREATE TABLE review (
+  id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL, 
+  comment TEXT NOT NULL,
+  rating INT(1) NOT NULL,
+  review_status VARCHAR(50) DEFAULT NULL
+);
+
+CREATE TABLE add_to_cart (
+   cart_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    username VARCHAR(255) NOT NULL, 
+    product_image LONGBLOB NOT NULL, 
+    product_name VARCHAR(50) NOT NULL,
+    product_gender VARCHAR(10) NOT NULL,
+    product_price DECIMAL(10, 2) NOT NULL,
+    user_size INT NOT NULL,
+    user_color VARCHAR(20) NOT NULL,
+    user_quantity INT NOT NULL, 
+    total_cost DECIMAL(10, 2) NOT NULL,
+    order_status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    FOREIGN KEY (product_id) REFERENCES product(product_id)
+);
+
+CREATE TABLE `dummy_table` (
+  `id` int(11) DEFAULT NULL,
+  `card_number` varchar(16) DEFAULT NULL,
+  `card_expire` varchar(7) DEFAULT NULL,
+  `cvv` varchar(4) DEFAULT NULL
+);
+
+INSERT INTO `dummy_table` (`id`, `card_number`, `card_expire`, `cvv`) VALUES
+(NULL, '1234567890123456', '06/2023', '123'),
+(NULL, '9876543210987654', '09/2024', '456');
