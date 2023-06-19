@@ -110,6 +110,7 @@ CREATE TABLE review (
 CREATE TABLE add_to_cart (
    cart_id INT PRIMARY KEY AUTO_INCREMENT,
     product_id INT NOT NULL,
+    product_details_id VARCHAR(20) NOT NULL,
     username VARCHAR(255) NOT NULL, 
     product_image LONGBLOB NOT NULL, 
     product_name VARCHAR(50) NOT NULL,
@@ -121,6 +122,7 @@ CREATE TABLE add_to_cart (
     total_cost DECIMAL(10, 2) NOT NULL,
     order_status VARCHAR(50) NOT NULL DEFAULT 'Pending',
     order_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_details_id) REFERENCES product_details(product_details_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
