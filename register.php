@@ -310,7 +310,7 @@ session_destroy();
 			
 			<div class="input-group password-container">
 			<input type="password" placeholder="Password" name="password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
-    title="Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number">
+							title="Password must contain between 8 to 11 characters and atleast 1 Alphabet and 1 Number">
 
   <p id="message" style="display: none; font-weight: bold;">Password is <span id="strength"></span></p>
 
@@ -414,41 +414,37 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</div>
 	
 	<script>
-    var pass = document.getElementById("password");
-    var msg = document.getElementById("message");
-    var str = document.getElementById("strength");
-    var uppercaseRegex = /[A-Z]/;
-    var punctuationRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/;
+  var pass = document.getElementById("password");
+  var msg = document.getElementById("message");
+  var str = document.getElementById("strength");
+  var uppercaseRegex = /[A-Z]/;
+  var numberRegex = /\d/;
 
-    pass.addEventListener('input', () => {
-      if (pass.value.length > 0) {
-        msg.style.display = "block";
-      } else {
-        msg.style.display = "none";
-      }
-      if (pass.value.length < 4) {
-        str.innerHTML = "weak";
-        pass.style.borderColor = "#ff5925";
-        msg.style.color = "#ff5925";
-      } else if (pass.value.length >= 4 && pass.value.length < 8 && uppercaseRegex.test(pass.value)) {
-        str.innerHTML = "medium";
-        pass.style.borderColor = "gold";
-        msg.style.color = "gold";
-      } else if (pass.value.length >= 8 && pass.value.length <= 11 && uppercaseRegex.test(pass.value) && punctuationRegex.test(pass.value)) {
-        str.innerHTML = "strong";
-        pass.style.borderColor = "#26d730";
-        msg.style.color = "#26d730";
-      } else if (pass.value.length > 11) {
-        str.innerHTML = "Password must contain between 8 to 11 characters and at least 1 alphabet 1 special symbol and 1 number";
-        pass.style.borderColor = "#ff5925";
-        msg.style.color = "#ff5925";
-      } else {
-        str.innerHTML = "";
-        pass.style.borderColor = "";
-        msg.style.color = "";
-      }
-    });
-  </script>
+  pass.addEventListener('input', () => {
+    if (pass.value.length > 0) {
+      msg.style.display = "block";
+    } else {
+      msg.style.display = "none";
+    }
+    if (pass.value.length < 4) {
+      str.innerHTML = "weak";
+      pass.style.borderColor = "#ff5925";
+      msg.style.color = "#ff5925";
+    } else if (pass.value.length >= 8 && pass.value.length <= 11 && uppercaseRegex.test(pass.value) && numberRegex.test(pass.value)) {
+      str.innerHTML = "strong";
+      pass.style.borderColor = "#26d730";
+      msg.style.color = "#26d730";
+    } else if (pass.value.length > 11) {
+      str.innerHTML = "Password must contain between 8 to 11 characters, at least 1 uppercase letter, and 1 number.";
+      pass.style.borderColor = "#ff5925";
+      msg.style.color = "#ff5925";
+    } else {
+      str.innerHTML = "not match the password requirement";
+      pass.style.borderColor = "red";
+      msg.style.color = "red";
+    }
+  });
+</script>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
    <!-- popper -->
