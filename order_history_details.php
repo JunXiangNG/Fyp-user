@@ -399,7 +399,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result) {
 	// Order status updated successfully
-	echo '<script>alert("Order status updated successfully!");</script>';
+	echo '<script>alert("Application successful, please wait for admin to review!");</script>';
 	echo '<script>window.location.href = "order_history.php";</script>';
       } else {
 	echo "Error updating order status: " . $connect->error;
@@ -414,7 +414,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="row">
     <div class="col-md-12 text-right">
         <p>
-            <button class="btn btn-danger" onclick="refundOrder(<?php echo $order_id; ?>)">Refund</button>
+            <button class="btn btn-primary" onclick="refundOrder(<?php echo $order_id; ?>)">Refund</button>
         </p>
     </div>
 </div>
@@ -444,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 form.submit();
             } else {
-                alert('Refund confirmation is incorrect. Refund canceled.');
+                alert('Application failed. Refund canceled!');
             }
         }
     }
