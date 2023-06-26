@@ -385,8 +385,73 @@ if (isset($_SESSION['username'])) {
             <p><a href="http://localhost/fyp/receipt-db.php?order_id=<?php echo $order_id; ?>" class="btn btn-primary">Print Receipt</a></p>
         </div>
     </div>
-</body>
-</html>
+
+
+
+    <?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['order_id']) && $_POST['status'] === 'Freezing') {
+        $orderId = $_POST['order_id'];
+
+        // Update the order_status
+        $query = "UPDATE orders SET order_status = 'Freezing' WHERE order_id = '$orderId'";
+        $result = $connect->query($query);
+
+        if ($result) {
+	// Order status updated successfully
+	echo '<script>alert("Order status updated successfully!");</script>';
+	echo '<script>window.location.href = "order_history.php";</script>';
+      } else {
+	echo "Error updating order status: " . $connect->error;
+      }
+      
+    } else {
+        echo "Invalid parameters";
+    }
+}
+?>
+
+<div class="row">
+    <div class="col-md-12 text-right">
+        <p>
+            <button class="btn btn-danger" onclick="refundOrder(<?php echo $order_id; ?>)">Refund</button>
+        </p>
+    </div>
+</div>
+
+<script>
+    function refundOrder(orderId) {
+        if (confirm('Are you sure you want to refund this order?')) {
+            var confirmation = prompt('Please enter "confirm" to proceed with the refund:');
+            if (confirmation === 'confirm') {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.style.display = 'none';
+
+                var orderIdInput = document.createElement('input');
+                orderIdInput.type = 'hidden';
+                orderIdInput.name = 'order_id';
+                orderIdInput.value = orderId;
+                form.appendChild(orderIdInput);
+
+                var statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'status';
+                statusInput.value = 'Freezing';
+                form.appendChild(statusInput);
+
+                document.body.appendChild(form);
+
+                form.submit();
+            } else {
+                alert('Refund confirmation is incorrect. Refund canceled.');
+            }
+        }
+    }
+</script>
+
+
+
 
 <?php
 }
