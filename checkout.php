@@ -467,13 +467,12 @@ if (isset($_POST['savebtn'])) {
                     $insert_receipts_result = mysqli_query($connect, $insert_receipts_query);
 
                     // Update the product quantity
-                    $product_query = "SELECT product_details_id, product_quantity FROM product_details WHERE product_id = '$product_id' AND product_size = '$user_size' AND product_color = '$user_color'";
-                    $product_result = mysqli_query($connect, $product_query);
-                    $row = mysqli_fetch_assoc($product_result);
-                    $product_details_id = $row['product_details_id'];
-                    $product_quantity = $row['product_quantity'];
+                    $product_details_query = "SELECT product_details_id, product_quantity FROM product_details WHERE product_details_id = '$product_details_id'";
+                    $product_details_result = mysqli_query($connect, $product_details_query);
+                    $product_details_row = mysqli_fetch_assoc($product_details_result);
+                    $product_quantity = $product_details_row['product_quantity'];
 
-                    $update_query = "UPDATE product_details SET product_quantity = $product_quantity - $user_quantity WHERE product_details_id = '$product_details_id'";
+                    $update_query = "UPDATE product_details SET product_quantity = product_quantity - $user_quantity WHERE product_details_id = '$product_details_id'";
                     $update_result = mysqli_query($connect, $update_query);
 
                     if (!$update_result) {
@@ -499,6 +498,7 @@ if (isset($_POST['savebtn'])) {
     }
 }
 ?>
+
 
 
 
