@@ -439,11 +439,10 @@ if (isset($_GET['product_id'])) {
 ?>
 
 <?php
+
 if (isset($_POST['savebtn'])) {
     // Get the form data
     $product_id = $_GET["product_id"];
-  
-   
 
     if (isset($_SESSION['username'])) {
         $username = $_SESSION['username'];
@@ -464,7 +463,7 @@ if (isset($_POST['savebtn'])) {
         $product_name = $row['product_name'];
         $product_price = $row['product_price'];
         $product_quantity = $row['product_quantity'];
-       
+
         $user_size = $_POST['size'];
         $user_color = $_POST['colour'];
         $user_quantity = $_POST['quantity'];
@@ -492,20 +491,26 @@ if (isset($_POST['savebtn'])) {
 
             if (mysqli_num_rows($check_result) > 0) {
                 // Product already exists in the add to cart table, update the add to cart
-                $update_query2 = "UPDATE add_to_cart SET user_quantity = user_quantity + '$user_quantity' WHERE username = '$username' AND product_id = '$product_id' AND user_size = '$user_size' AND user_color = '$user_color'";
+                $existing_row = mysqli_fetch_assoc($check_result);
+                $existing_quantity = $existing_row['user_quantity'];
+                $new_quantity = $existing_quantity + $user_quantity;
 
-                $update_result2 = false;
-                if ($user_quantity < 6) {
+                if ($new_quantity <= 5) {
+                    $update_query2 = "UPDATE add_to_cart SET user_quantity = '$new_quantity' WHERE username = '$username' AND product_id = '$product_id' AND user_size = '$user_size' AND user_color = '$user_color'";
                     $update_result2 = mysqli_query($connect, $update_query2);
-                }
 
-                if ($update_result2) {
-                    // Display a success message
-                    echo "<script type='text/javascript'>alert('Quantity updated successfully!');</script>";
-                    echo '<script>window.location.href = "http://localhost/fyp/men_product_detail.php?product_id=' . $product_id . '";</script>';
+                    if ($update_result2) {
+                        // Display a success message
+                        echo "<script type='text/javascript'>alert('Quantity updated successfully!');</script>";
+                        echo '<script>window.location.href = "http://localhost/fyp/men_product_detail.php?product_id=' . $product_id . '";</script>';
+                    } else {
+                        // Display an error message
+                        echo "<script type='text/javascript'>alert('Failed to update quantity!');</script>" . mysqli_error($connect);
+                        echo '<script>window.location.href = "http://localhost/fyp/men_product_detail.php?product_id=' . $product_id . '";</script>';
+                    }
                 } else {
-                    // Display an error message
-                    echo "<script type='text/javascript'>alert('Failed to update quantity, can only order a maximum of 5 items!');</script>" . mysqli_error($connect);
+                    // Display an error message when exceeding the maximum quantity
+                    echo "<script type='text/javascript'>alert('You can only order a maximum of 5 items!');</script>";
                     echo '<script>window.location.href = "http://localhost/fyp/men_product_detail.php?product_id=' . $product_id . '";</script>';
                 }
             } else {
