@@ -677,7 +677,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								function increaseValue() {
 									var value = parseInt(document.getElementById('myNumber').value, 10);
 									value = isNaN(value) ? 1 : value;
-									if (value < 5 && value < productQuantity ) {
+									if (value < 5  ) {
 										value++;
 									}
 									document.getElementById('myNumber').value = value;
