@@ -358,7 +358,7 @@ $result = mysqli_query($connect, $select_query);
 						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
 						<p>
 							<ul class="colorlib-social-icons">
-								<li><a href="#"><i class="icon-twitter"></i></a></li>
+								<li><a href="www.twitter.com"><i class="icon-twitter"></i></a></li>
 								<li><a href="#"><i class="icon-facebook"></i></a></li>
 								<li><a href="#"><i class="icon-linkedin"></i></a></li>
 								
