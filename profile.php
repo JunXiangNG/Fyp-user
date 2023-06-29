@@ -217,20 +217,11 @@ if ($count > 0) {
 								<li class="active"><a href="http://localhost/fyp/user_home_page.php">Home</a></li>
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/men.php">Men</a>
-									<ul class="dropdown">
-										<li><a href="#">Nike</a></li>
-										<li><a href="#">Adidas</a></li>
 									
-									</ul>
 								</li>
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/women.php">Women</a>
-									<ul class="dropdown">
-									    <li><a href="#">Nike</a></li>
-										<li><a href="#">Adidas</a></li>
-										
-									
-									</ul>
+								
 								</li>
 							
 								<li><a href="http://localhost/fyp/about.php">About</a></li>
@@ -239,8 +230,8 @@ if ($count > 0) {
 									<a href="#">Account</a>
 									<ul class="dropdown">
 										<li><a href="profile.php">Edit Profile</a></li>
-										<li><a href="#">Order History</a></li>
-                                        <li><a href="logout.php">Logout</a></li>
+										<li><a href="order_history.php">Order History</a></li>
+                    <li><a href="logout.php">Logout</a></li>
 									</ul>
 									
 									<?php
