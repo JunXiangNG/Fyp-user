@@ -1,4 +1,13 @@
-<?php
+<!DOCTYPE HTML>
+<html>
+	<head>
+	<title>About</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
+	<?php
 
 include 'dataconnection.php';
 session_start();
@@ -7,17 +16,12 @@ if(isset($_SESSION['username'])) {
     echo "<div style='font-size: 20px; padding: 10px; color:green;'>Welcome, $username!</div>";
 }
 ?>
-
-<!DOCTYPE HTML>
-<html>
-	<head>
-	<title>User Home</title>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Rokkitt:100,300,400,700" rel="stylesheet">
-	
+<?php 
+    if(empty($username)) {
+        echo "<script type='text/javascript'>alert('You must be logged in to continue.');</script>";
+        echo '<script>window.location.href = "home.php";</script>';
+    }
+?>
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -47,18 +51,7 @@ if(isset($_SESSION['username'])) {
 
 	</head>
 	<body>
-	<?php
-    $connect = mysqli_connect("localhost", "root", "", "fyp");
-    if (!$connect) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-	?>	
-	<?php 
-    if(empty($username)) { //validation for user not login
-        echo "<script type='text/javascript'>alert('You must be logged in to continue.');</script>";
-        echo '<script>window.location.href = "home.php";</script>';
-    }
-?>
+		
 	<div class="colorlib-loader"></div>
 
 	<div id="page">
@@ -69,21 +62,19 @@ if(isset($_SESSION['username'])) {
 						<div class="col-sm-7 col-md-9">
 							<div id="colorlib-logo"><a href="http://localhost/fyp/user_home_page.php">4M Online Sport Shoe Store</a></div>
 						</div>
-					<div class="col-sm-5 col-md-3"> 
-                    <form action="#" class="search-wrap">
-			               <div class="form-group"><!-- search function !-->
-                           <input type="search" name="search" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control search" placeholder="Search product">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
-			            </form>
-                        </div>
+						<div class="col-sm-5 col-md-3">
+						<form action="http://localhost/fyp/search.php" class="search-wrap" method="GET">
+						<div class="form-group">
+							<input type="search" name="search" required value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>" class="form-control search" placeholder="Search product">
+							<button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
+						</div>
+					</form>
+			         </div>
 		         </div>
-    
-
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-								<li class="active"><a href="http://localhost/fyp/user_home_page.php">Home</a></li>
+								<li><a href="http://localhost/fyp/user_home_page.php">Home</a></li>
 								<li class="has-dropdown">
 									<a href="http://localhost/fyp/men.php">Men</a>
 									
@@ -93,16 +84,15 @@ if(isset($_SESSION['username'])) {
 									
 								</li>
 							
-								<li><a href="http://localhost/fyp/about.php">About</a></li>
+								<li class="active"><a href="http://localhost/fyp/about.php">About</a></li>
 								<li><a href="viewreview.php">Review</a></li>
                                 <li class="has-dropdown">
 									<a href="#">Account</a>
 									<ul class="dropdown">
-									   <li><a href="profile.php">Edit Profile</a></li>
+										<li><a href="profile.php">Edit Profile</a></li>
 										<li><a href="order_history.php">Order History</a></li>
                                         <li><a href="logout.php">Logout</a></li>
 									</ul>
-									
 									<?php
 								
 								if (isset($_SESSION['username'])) {
@@ -152,160 +142,34 @@ if(isset($_SESSION['username'])) {
 				</div>
 			</div>
 		</nav>
-		<aside id="colorlib-hero">
-			<div class="flexslider">
-				<ul class="slides">
-				<li style="background-image: url(images/background.jpg);">
-			   		<div class="overlay"></div>
-			   		<div class="container-fluid">
-			   			<div class="row">
-				   			<div class="col-sm-6 offset-sm-3 text-center slider-text">
-				   				<div class="slider-text-inner">
-				   					<div class="desc">
-					   					<h1 class="head-1">Men's</h1>
-					   					<h2 class="head-2">Shoes</h2>
-					   					<h2 class="head-3">Collection</h2>
-					   					<p class="category"><span>New running shoes</span></p>
-					   					<p><a href="http://localhost/fyp/men.php" class="btn btn-primary">Shop Collection</a></p>
-				   					</div>
-				   				</div>
-				   			</div>
-				   		</div>
-			   		</div>
-			   	</li>
-			   	<li style="background-image: url(https://wallpaper.dog/large/624695.jpg);">
-			   		<div class="overlay"></div>
-			   		<div class="container-fluid">
-			   			<div class="row">
-				   			<div class="col-sm-6 offset-sm-3 text-center slider-text">
-				   				<div class="slider-text-inner">
-				   					<div class="desc">
-									   <h1 class="head-1">Women's</h1>
-					   					<h2 class="head-2">Shoes</h2>
-					   					<h2 class="head-3">Collection</h2>
-					   					<p class="category"><span>New running shoes</span></p>
-					   					<p><a href="http://localhost/fyp/women.php" class="btn btn-primary">Shop Collection</a></
-				   					</div>
-				   				</div>
-				   			</div>
-				   		</div>
-			   		</div>
-			   	</li>
-			
-			  	</ul>
-		  	</div>
-		</aside>
-		<div class="colorlib-intro">
+
+		<div class="breadcrumbs">
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-12 text-center">
-						<h2 class="intro">It started with a simple idea: Create quality, well-designed products that I wanted myself.</h2>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="colorlib-product">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-sm-6 text-center">
-						<div class="featured">
-						<a href="http://localhost/fyp/men.php" class="featured-img" style="background-image:url(https://th.bing.com/th/id/OIP.Yi12XLxOgMVFDDvaTTo18wHaFB?pid=ImgDet&rs=1);"></a>
-							<div class="desc">
-								<h2><a href="http://localhost/fyp/men.php">Shop Men's Collection</a></h2>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 text-center">
-						<div class="featured">
-						<a href="http://localhost/fyp/women.php" class="featured-img" style="background-image: url(https://th.bing.com/th/id/OIP.GYdHBiUO9hbTg0L7zBzizwHaHa?pid=ImgDet&w=700&h=700&rs=1);"></a>
-							<div class="desc">
-								<h2><a href="http://localhost/fyp/women.php">Shop Women's Collection</a></h2>
-							</div>
-						</div>
+					<div class="col">
+						<p class="bread"><span><a href="user_home_page.php">Home</a></span> / <span>About</span></p>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<?php
-    if (isset($_GET['search'])) {
-        $filtervalues = $_GET['search'];
-        $select_query = "SELECT * FROM product
-        INNER JOIN brand ON product.brand_id = brand.brand_id
-        INNER JOIN product_details ON product.product_id = product_details.product_id
-        WHERE product_name LIKE '%$filtervalues%' OR brand_name LIKE '%$filtervalues%'";
-        $query_run = mysqli_query($connect, $select_query);
 
-        if ($query_run) {
-            $count = mysqli_num_rows($query_run);
-
-            if ($count > 0) {
-                echo '<div class="container">';
-                echo '<div class="d-flex flex-wrap">';
-                while ($row = mysqli_fetch_assoc($query_run)) {
-                    $product_id = $row['product_id'];
-                    $product_image = $row['product_image'];
-                    $product_name = $row['product_name'];
-                    $product_price = $row['product_price'];
-
-              
-                    ?>
-
-                    <div class="col-md-4 col-lg-4 mb-4 text-center">
-                        <div class="product-entry border">
-                            <a href="http://localhost/fyp/product_detail.php?product_id=<?php echo $product_id; ?>" class="prod-img">
-							<?php
-									$imageData = $row['product_image'];
-									
-									
-									if ($imageData) {
-										echo '<img src="data:image/jpeg;base64,' . base64_encode($imageData) . '" class="img-fluid" />';
-									} else {
-										echo 'No Image';
-									}
-										?>
-                                <div class="desc">
-                                    <h2><?php echo $product_name; ?></h2>
-                                    <span class="price"><?php echo $product_price; ?></span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <?php
-                }
-
-                }
-                echo '</div>';
-                echo '</div>';
-                echo '<script type="text/javascript">alert("' . $count . ' Product(s) Found.");</script>';
-            } else {
-                echo '<script type="text/javascript">alert("No Product Found.");</script>';
-            }
-        } else {
-            echo '<script type="text/javascript">alert("Error !!!.");</script>';
-        }
-    
-?>
-
-
+		<div class="colorlib-about">
+			<div class="container">
+				<div class="row row-pb-lg">
+					<div class="col-sm-6 mb-3">
+						<div class="video colorlib-video" style="background-image: url(images/about.jpg);">	
+							<a href="https://www.youtube.com/watch?v=ScTF9rbkqW8" class="popup-vimeo"><i class="icon-play3"></i></a>
+							<div class="overlay"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="about-wrap">
+							<h2>4M Online Sport Shoe Store</h2>
+							<p>Welcome to 4M Online Sport Shoe Store! As students from MMU IT, we have created this website with a sole purpose in mind: to provide you with an exceptional user experience. Our primary focus at the moment is on running shoes, specifically from the renowned brands Nike and Adidas. With a passion for sports and a commitment to quality, we aim to offer you a wide selection of top-notch athletic footwear that combines style, comfort, and performance. Whether you're a professional athlete or an enthusiastic runner, our goal is to enhance your sporting journey by delivering the perfect pair of running shoes to meet your needs. Browse our collection and discover the perfect fit for your active lifestyle at 4M Online Sport Shoe Store!</p>
 		
-<div class="colorlib-partner">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
-						<h2>Trusted Partners</h2>
+						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col partner-col text-center">
-					<img src="images/brand-1.jpg" class="img-fluid" style="max-width: 50%;" alt="Free html4 bootstrap 4 template">
-
-					</div>
-					<div class="col partner-col text-center">
-						<img src="images/brand-2.jpg" class="img-fluid" style="max-width: 50%;" alt="Free html4 bootstrap 4 template">
-					</div>
-					
 				</div>
 			</div>
 		</div>
@@ -402,5 +266,4 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 	</body>
 </html>
-
 
