@@ -397,7 +397,7 @@ if (isset($_GET['product_id'])) {
 							
 								<div class="quantity">
 								<button type="button" onclick="decreaseValue()">-</button>
-								<input type="number" id="myNumber" name="quantity" min="1" max="<?php echo min($product_quantity, 5); ?>" value="1" readonly required>
+								<input type="number" id="myNumber" name="quantity" min="1" max="5" value="1" readonly required>
 								<button type="button" onclick="increaseValue()">+</button>
 								
 								</div>
@@ -419,12 +419,14 @@ if (isset($_GET['product_id'])) {
 										$product_color = $row['product_color'];
 								
 
-									if ($product_quantity <= 5) {
-										echo '<br><span class="price">Notice: ' . $product_name . ', Size:' . $product_size . ',Color: ' . $product_color . ' , ' . $product_quantity . ' Item(s) left</span>';
-
-									} else {
-										echo "";
-									}
+										if ($product_quantity <= 0) {
+											echo '<br><span class="price">Notice: ' . $product_name . ', Size:' . $product_size . ',Color: ' . $product_color . ' , ' .  ' Item out of stock</span>';
+										      } elseif ($product_quantity <= 5) {
+											echo '<br><span class="price">Notice: ' . $product_name . ', Size:' . $product_size . ',Color: ' . $product_color . ' , ' . $product_quantity . ' Item(s) left</span>';
+										      } else {
+											echo "";
+										      }
+									
 								}
 							}
 								?>
@@ -457,7 +459,6 @@ if (isset($_GET['product_id'])) {
 ?>
 
 <?php
-
 if (isset($_POST['savebtn'])) {
     // Get the form data
     $product_id = $_GET["product_id"];
@@ -532,36 +533,43 @@ if (isset($_POST['savebtn'])) {
                     echo '<script>window.location.href = "http://localhost/fyp/product_detail.php?product_id=' . $product_id . '";</script>';
                 }
             } else {
-                // Query to get the product details ID
-                $product_details_id_query = "SELECT product_details_id FROM product_details WHERE product_id = '$product_id' AND product_color = '$user_color' AND product_size = '$user_size'";
-                $product_details_id_result = mysqli_query($connect, $product_details_id_query);
-                $row = mysqli_fetch_assoc($product_details_id_result);
-                $product_details_id = $row['product_details_id'];
-
-                // Sanitize the product details ID
-                $product_details_id = mysqli_real_escape_string($connect, $product_details_id);
-
-                // Query to get the product image based on color and size
-                $image_query = "SELECT product_image FROM product_details WHERE product_id = '$product_id' AND product_color = '$user_color' AND product_size = '$user_size'";
-                $image_result = mysqli_query($connect, $image_query);
-                $row = mysqli_fetch_assoc($image_result);
-                $product_image = $row['product_image'];
-
-                // Sanitize the product image
-                $product_image = mysqli_real_escape_string($connect, $product_image);
-
-                // Insert the data into the add_to_cart table
-                $ins_query = "INSERT INTO add_to_cart (product_id,product_details_id, username, product_image, product_name, product_gender, product_price, user_size, user_color, user_quantity, total_cost)
-                VALUES ('$product_id','$product_details_id', '$username', '$product_image', '$product_name', '$product_gender', '$product_price', '$user_size', '$user_color', '$user_quantity', '$total_cost')";
-                $ins_result = mysqli_query($connect, $ins_query);
-
-                if ($ins_result) {
-                    // Display a success message
-                    echo "<script type='text/javascript'>alert('Order placed successfully!');</script>";
+                // Check if the product quantity is greater than 0
+                if ($product_quantity <= 0) {
+                    // Display an error message when the product is out of stock
+                    echo "<script type='text/javascript'>alert('Item out of stock!');</script>";
                     echo '<script>window.location.href = "http://localhost/fyp/product_detail.php?product_id=' . $product_id . '";</script>';
                 } else {
-                    // Display an error message
-                    echo "<script type='text/javascript'>alert('Failed to place order!');</script>" . mysqli_error($connect);
+                    // Query to get the product details ID
+                    $product_details_id_query = "SELECT product_details_id FROM product_details WHERE product_id = '$product_id' AND product_color = '$user_color' AND product_size = '$user_size'";
+                    $product_details_id_result = mysqli_query($connect, $product_details_id_query);
+                    $row = mysqli_fetch_assoc($product_details_id_result);
+                    $product_details_id = $row['product_details_id'];
+
+                    // Sanitize the product details ID
+                    $product_details_id = mysqli_real_escape_string($connect, $product_details_id);
+
+                    // Query to get the product image based on color and size
+                    $image_query = "SELECT product_image FROM product_details WHERE product_id = '$product_id' AND product_color = '$user_color' AND product_size = '$user_size'";
+                    $image_result = mysqli_query($connect, $image_query);
+                    $row = mysqli_fetch_assoc($image_result);
+                    $product_image = $row['product_image'];
+
+                    // Sanitize the product image
+                    $product_image = mysqli_real_escape_string($connect, $product_image);
+
+                    // Insert the data into the add_to_cart table
+                    $ins_query = "INSERT INTO add_to_cart (product_id,product_details_id, username, product_image, product_name, product_gender, product_price, user_size, user_color, user_quantity, total_cost)
+                    VALUES ('$product_id','$product_details_id', '$username', '$product_image', '$product_name', '$product_gender', '$product_price', '$user_size', '$user_color', '$user_quantity', '$total_cost')";
+                    $ins_result = mysqli_query($connect, $ins_query);
+
+                    if ($ins_result) {
+                        // Display a success message
+                        echo "<script type='text/javascript'>alert('Order placed successfully!');</script>";
+                        echo '<script>window.location.href = "http://localhost/fyp/product_detail.php?product_id=' . $product_id . '";</script>';
+                    } else {
+                        // Display an error message
+                        echo "<script type='text/javascript'>alert('Failed to place order!');</script>" . mysqli_error($connect);
+                    }
                 }
             }
         } else {
@@ -576,6 +584,7 @@ if (isset($_POST['savebtn'])) {
     }
 }
 ?>
+
 
 
 
@@ -692,34 +701,22 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 								<script>
 								function increaseValue() {
-								var value = parseInt(document.getElementById('myNumber').value, 10);
-								var maxQuantity = <?php echo min($product_quantity, 5); ?>;
-
-								value = isNaN(value) ? 1 : value;
-								if (value < maxQuantity) {
-								value++;
-								}
-								document.getElementById('myNumber').value = value;
+									var value = parseInt(document.getElementById('myNumber').value, 10);
+									value = isNaN(value) ? 1 : value;
+									if (value < 5) {
+										value++;
+									}
+									document.getElementById('myNumber').value = value;
 								}
 
 								function decreaseValue() {
-								var value = parseInt(document.getElementById('myNumber').value, 10);
-								value = isNaN(value) ? 1 : value;
-								value--;
-								if (value < 1) {
-								value = 1;
-								}
-								document.getElementById('myNumber').value = value;
-								}
-
-								function handleCheckboxChange(checkbox) {
-									// Uncheck all checkboxes except the one that was clicked
-									var checkboxes = document.getElementsByName(checkbox.name);
-									for (var i = 0; i < checkboxes.length; i++) {
-										if (checkboxes[i] !== checkbox) {
-											checkboxes[i].checked = false;
-										}
+									var value = parseInt(document.getElementById('myNumber').value, 10);
+									value = isNaN(value) ? 1 : value;
+									value--;
+									if (value < 1) {
+										value = 1;
 									}
+									document.getElementById('myNumber').value = value;
 								}
 
 								function validateForm() {
