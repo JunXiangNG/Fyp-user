@@ -283,15 +283,16 @@ session_destroy();
 	<div class="register-container">
 		<form id="form" action="" method="POST" class="login-email">
             <p class="login-text" style="font-size: 2rem; font-weight: 800;">Register</p>
+			<small style="font-weight: bold;">NOTE: *All information is required</small>
+			<br>
 			<div class="input-group">
 				<input type="text" placeholder="Username" id="username"name="username" value="<?php echo $username; ?>" required>
 				<div class="error"></div>
 			</div>
 			<br>
-			<div class="input-group">
-				<input type="email" placeholder="Email" name="email" id="email" value="<?php echo $email; ?>" required>
-				
-			</div>
+		  <div class="input-group">
+          <input type="email" placeholder="Email" name="email" id="email" onchange="validateEmail()" value="<?php echo $email; ?>" required>
+         </div>
 			<br>
 			
 			<div class="input-group">
@@ -308,18 +309,20 @@ session_destroy();
     		</div>
 			<br>
 			
+			
 			<div class="input-group password-container">
+			<small style="font-weight: bold;">NOTE: *Password must contain between 8 to 11 characters, at least 1 uppercase letter, and 1 number.</small>
 			<input type="password" placeholder="Password" name="password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,11}" 
-							title="Password must contain between 8 to 11 characters and atleast 1 Alphabet and 1 Number">
+							title="Password must contain between 8 to 11 characters, at least 1 uppercase letter, and 1 number."  >
 
   <p id="message" style="display: none; font-weight: bold;">Password is <span id="strength"></span></p>
 
 			 </div>
-          
+			<br>
 			<br>
 			
             <div class="input-group password-container">
-				<input type="password" placeholder="Confirm Password" name="cpassword"  id="confirm-password"  value="<?php echo $_POST['cpassword']; ?>" required>
+				<input type="password" placeholder="Confirm Password" name="cpassword"  id="confirm-password"   required>
 			
 			</div>
 			<br>
@@ -444,6 +447,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
       msg.style.color = "red";
     }
   });
+  
+</script>
+<script>
+  function validateEmail() {
+    var email = document.getElementById("email").value;
+    if (email && !email.endsWith(".com")) {
+      alert("Invalid email address! Please enter an email ending with '.com'.");
+      document.getElementById("email").value = "";
+    }
+  }
 </script>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
