@@ -305,6 +305,13 @@ if (isset($_SESSION['username'])) {
 								<option value="Melaka" <?php if ($state == "Melaka") echo "selected"; ?>>Melaka</option>
 								<option value="Pahang" <?php if ($state == "Pahang") echo "selected"; ?>>Pahang</option>
 								<option value="Negeri Sembilan" <?php if ($state == "Negeri Sembilan") echo "selected"; ?>>Negeri Sembilan</option>
+								<option value="Kelantan" <?php if ($state == "Kelantan") echo "selected"; ?>>Kelantan</option>
+								<option value="Perak" <?php if ($state == "Perak") echo "selected"; ?>>Perak</option>
+								<option value="Perlis" <?php if ($state == "Perlis") echo "selected"; ?>>Perlis</option>
+								<option value="Pulau Pinang" <?php if ($state == "Pulau Pinang") echo "selected"; ?>>Pulau Pinang</option>
+								<option value="Selangor" <?php if ($state == "Selangor") echo "selected"; ?>>Selangor</option>
+								<option value="Terengganu" <?php if ($state == "Terengganu") echo "selected"; ?>>Terengganu</option>
+								<option value="Kuala Lumpur" <?php if ($state == "Kuala Lumpur") echo "selected"; ?>>Kuala Lumpur</option>
 								<!-- Add more state options here -->
 						</select>
 						</div>
@@ -614,72 +621,127 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 <script>
-    function populateCities() {
-      var stateSelect = document.getElementById("state");
-      var citySelect = document.getElementById("city");
-      var state = stateSelect.value;
-      var town = "<?php echo isset($town) ? $town : ''; ?>";
+  function populateCities() {
+  var stateSelect = document.getElementById("state");
+  var citySelect = document.getElementById("city");
+  var state = stateSelect.value;
+  var town = "<?php echo isset($town) ? $town : ''; ?>";
 
+  // Clear city options
+  citySelect.innerHTML = '<option value="">- Select City -</option>';
 
-      // Clear city options
-      citySelect.innerHTML = '<option value="">- Select City -</option>';
+  if (state === "Johor") {
+    // Add Johor cities
+    var johorCities = ["Yong Peng", "Segamat", "Johor Bahru", "Tangkak", "Skudai", "Muar", "Kluang", "Pasir Gudang", "Kulai"];
+    for (var i = 0; i < johorCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = johorCities[i];
+      option.value = johorCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Selangor") {
+    // Add Selangor cities
+    var selangorCities = ["Petaling Jaya", "Shah Alam", "Klang", "Puchong", "Cheras", "Rawang", "Semenyih", "Putrajaya", "Cyberjaya", "Subang Jaya"];
+    for (var i = 0; i < selangorCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = selangorCities[i];
+      option.value = selangorCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Melaka") {
+    // Add Melaka cities
+    var melakaCities = ["Ayer Keroh", "Alor Gajah", "Malacca City (Bandaraya Melaka)", "Klebang", "Jasin", "Batu Berendam", "Bukit Katil"];
+    for (var i = 0; i < melakaCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = melakaCities[i];
+      option.value = melakaCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Pahang") {
+    // Add Pahang cities
+    var pahangCities = ["Kuantan", "Cameron Highlands", "Temerloh", "Raub", "Mentakab", "Pekan", "Kuala Lipis", "Gambang"];
+    for (var i = 0; i < pahangCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = pahangCities[i];
+      option.value = pahangCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Negeri Sembilan") {
+    // Add Negeri Sembilan cities
+    var negerisembilanCities = ["Seremban", "Port Dickson", "Nilai", "Seri Menanti", "Bahau", "Kuala Pilah", "Rembau", "Gemas"];
+    for (var i = 0; i < negerisembilanCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = negerisembilanCities[i];
+      option.value = negerisembilanCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Kelantan") {
+    // Add Kelantan cities
+    var kelantanCities = ["Kota Bharu", "Kuala Krai", "Pasir Mas", "Tumpat", "Tanah Merah", "Pangkal Kalong"];
+    for (var i = 0; i < kelantanCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = kelantanCities[i];
+      option.value = kelantanCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Perak") {
+    // Add Perak cities
+    var perakCities = ["Ipoh", "Taiping", "Sitiawan", "Teluk Intan", "Batu Gajah", "Lumut", "Kampar"];
+    for (var i = 0; i < perakCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = perakCities[i];
+      option.value = perakCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Perlis") {
+    // Add Perlis cities
+    var perlisCities = ["Kangar", "Arau"];
+    for (var i = 0; i < perlisCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = perlisCities[i];
+      option.value = perlisCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Pulau Pinang") {
+    // Add Pulau Pinang cities
+    var pulauPinangCities = ["George Town", "Butterworth", "Bukit Mertajam", "Seberang Perai", "Balik Pulau"];
+    for (var i = 0; i < pulauPinangCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = pulauPinangCities[i];
+      option.value = pulauPinangCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Terengganu") {
+    // Add Terengganu cities
+    var terengganuCities = ["Kuala Terengganu", "Chukai", "Dungun", "Kerteh", "Marang", "Besut"];
+    for (var i = 0; i < terengganuCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = terengganuCities[i];
+      option.value = terengganuCities[i];
+      citySelect.add(option);
+    }
+  } else if (state === "Kuala Lumpur") {
+    // Add Kuala Lumpur cities
+    var klCities = ["Kuala Lumpur City Centre", "Bukit Bintang", "Petaling Jaya"];
+    for (var i = 0; i < klCities.length; i++) {
+      var option = document.createElement("option");
+      option.text = klCities[i];
+      option.value = klCities[i];
+      citySelect.add(option);
+    }
+  } 
 
-      if (state === "Johor") {
-        // Add Johor cities
-        var johorCities = ["Yong Peng", "Segamat", "Johor Bahru", "Tangkak", "Skudai", "Muar", "Kluang", "Pasir Gudang", "Kulai"];
-        for (var i = 0; i < johorCities.length; i++) {
-          var option = document.createElement("option");
-          option.text = johorCities[i];
-          option.value = johorCities[i];
-          citySelect.add(option);
-        }
-      } else if (state === "Selangor") {
-        // Add Selangor cities
-        var selangorCities = ["Petaling Jaya", "Shah Alam", "Klang", "Puchong", "Cheras", "Rawang", "Semenyih", "Putrajaya", "Cyberjaya"];
-        for (var i = 0; i < selangorCities.length; i++) {
-          var option = document.createElement("option");
-          option.text = selangorCities[i];
-          option.value = selangorCities[i];
-          citySelect.add(option);
-        }
-} else if (state === "Melaka") {
-        // Add Melaka cities
-        var melakaCities = ["Ayer Keroh", "Alor Gajah", "Malacca City (Bandaraya Melaka)", "Klebang", "Jasin", "Batu Berendam", "Bukit Katil"];
-        for (var i = 0; i < melakaCities.length; i++) {
-          var option = document.createElement("option");
-          option.text = melakaCities [i];
-          option.value = melakaCities [i];
-          citySelect.add(option);
-        }
-} else if (state === "Pahang") {
-        // Add Pahang cities
-        var pahangCities = ["Kuantan", "Cameron Highlands", "Temerloh", "Raub", "Mentakab", "Pekan", "Kuala Lipis", "Gambang"];
-        for (var i = 0; i < pahangCities.length; i++) {
-          var option = document.createElement("option");
-          option.text = pahangCities[i];
-          option.value = pahangCities[i];
-          citySelect.add(option);
-        }
-} else if (state === "Negeri Sembilan") {
-        // Add Negeri Sembilan cities
-        var negerisembilanCities = ["Seremban", "Port Dickson", "Nilai", "Seri Menanti", "Bahau", "Kuala Pilah", "Rembau", "Gemas"];
-        for (var i = 0; i < negerisembilanCities.length; i++) {
-          var option = document.createElement("option");
-          option.text = negerisembilanCities[i];
-          option.value = negerisembilanCities[i];
-          citySelect.add(option);
-        }
+  // Set the selected city if it matches the previous selection
+  if (town !== "") {
+    citySelect.value = town;
+  }
 }
 
-// Set the selected city if it matches the previous selection
-if (town !== "") {
-  citySelect.value = town;
-}
-}
 
-// Call the populateCities() function when the page loads
-window.onload = populateCities;
-</script>
+    // Call the populateCities() function when the page loads
+    window.onload = populateCities;
+  </script>
+
 	
 </body>
 </html>
