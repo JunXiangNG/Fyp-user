@@ -114,7 +114,7 @@ session_destroy();
     background: #FFF;
     border-radius: 5px;
     margin-left: 250px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 5px black;
     padding: 40px 30px;
     margin-top: 20px;
     margin-bottom: 20px;
